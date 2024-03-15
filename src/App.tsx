@@ -1,16 +1,20 @@
 import { createSignal, type Component, onCleanup, createEffect } from 'solid-js';
 import { DateTime } from 'luxon';
+import '@material/web/button/filled-button.js';
 
 const App: Component = () => {
   const [date, setDate] = createSignal<DateTime>();
   const [countdown, setCountdown] = createSignal<string>();
+  const [paydayDisplay, setPaydayDisplay] = createSignal<string>();
   const timer = setInterval(() => {
       let dateTime;
       dateTime = DateTime.now();
       setDate(DateTime.now())
     }, 1000);
 
-  const payday = DateTime.fromObject({ day: 5 }).plus({ month: 1 });
+  const payday = DateTime.fromObject({ day: 5 }).plus({ months: 1 });
+  console.log(payday);
+  setPaydayDisplay(payday.toFormat('dd/MM/yyyy'))
   let hourCountdown: number;
   let minuteCountdown: number;
   let secondCountdown: number;
@@ -40,13 +44,12 @@ const App: Component = () => {
         <p>
           {countdown()}
         </p>
-        <a
-          href="https://github.com/solidjs/solid"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn Solid
-        </a>
+        <p>
+          Next payday
+        </p>
+        <div>
+          {paydayDisplay()}
+        </div>
       </header>
     </div>
   );
