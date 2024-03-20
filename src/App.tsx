@@ -1,56 +1,22 @@
-import { createSignal, type Component, onCleanup, createEffect } from 'solid-js';
+import { createSignal, type Component } from 'solid-js';
+import { Counter } from './components/Counter';
 import { DateTime } from 'luxon';
-import '@material/web/button/filled-button.js';
 
 const App: Component = () => {
-  const [date, setDate] = createSignal<DateTime>();
-  const [countdown, setCountdown] = createSignal<string>();
-  const [paydayDisplay, setPaydayDisplay] = createSignal<string>();
-  const timer = setInterval(() => {
-      let dateTime;
-      dateTime = DateTime.now();
-      setDate(DateTime.now())
-    }, 1000);
+  const [payday, setPayday] = createSignal<DateTime<boolean>>(DateTime.fromObject({ day: 5 }).plus({ months: 1 }));
+  const [paydayDisplay, setPaydayDisplay] = createSignal<string>(payday().toFormat('dd/MM/yyyy'));
 
-  const payday = DateTime.fromObject({ day: 5 }).plus({ months: 1 });
-  console.log(payday);
-  setPaydayDisplay(payday.toFormat('dd/MM/yyyy'))
-  let hourCountdown: number;
-  let minuteCountdown: number;
-  let secondCountdown: number;
-  createEffect(() => {
-    const durationDays = date()?.diff(payday, 'days').days;
-
-    if (durationDays) {
-      hourCountdown = (Math.abs(durationDays) % 1) * 24;
-      minuteCountdown = (hourCountdown % 1) * 60;
-      secondCountdown = (minuteCountdown % 1) * 60;
-
-      setCountdown(
-        `${~~hourCountdown}:${~~minuteCountdown < 10 ? `0${~~minuteCountdown}`: ~~minuteCountdown}:${~~secondCountdown < 10 ? `0${~~secondCountdown}` : ~~secondCountdown}`);
-    }
-  });
-
-  onCleanup(() => clearInterval(timer));
   return (
-    <div>
-      <header>
-        <p>
-          {date()?.toFormat('dd/MM/yyyy')}
-        </p>
-        <p>
-          {date()?.toFormat('hh:mm:ss')}
-        </p>
-        <p>
-          {countdown()}
-        </p>
-        <p>
-          Next payday
-        </p>
-        <div>
-          {paydayDisplay()}
-        </div>
-      </header>
+    <div class="container mx-auto">
+      <div class="text-5xl">
+        <h2 class="font-bold">Next Payday</h2>
+        <p class="font-semibold">{paydayDisplay()}</p>
+      </div>
+      <Counter paydayDate={payday()}></Counter>
+      <div class="w-1/3 flex flex-col mx-auto">
+        <img class="w-full mb-4" alt="meme-1" src="/img/meme1.jpg"></img>
+        <img class="w-full" alt="meme-2" src="/img/meme2.jpg"></img>
+      </div>
     </div>
   );
 };
