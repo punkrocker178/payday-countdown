@@ -17,6 +17,11 @@ const App: Component = () => {
         <img class="w-full mb-4" alt="meme-1" src="/img/meme1.jpg"></img>
         <img class="w-full" alt="meme-2" src="/img/meme2.jpg"></img>
       </div>
+
+      <div>
+        <label for="salaryDate">When is your payday</label>
+        <input class="block" id="salaryDate" type="date"></input>
+      </div>
     </div>
   );
 };
