@@ -13,6 +13,7 @@ export default defineConfig({
   ],
   server: {
     port: 3000,
+    allowedHosts: ['app.hiu178.top']
   },
   build: {
     target: 'esnext',
