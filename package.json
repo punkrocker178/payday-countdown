@@ -19,6 +19,7 @@
     "vite-plugin-solid": "^2.8.2"
   },
   "dependencies": {
+    "@modular-forms/solid": "^0.25.0",
     "@solidjs/router": "^0.15.3",
     "@tailwindcss/vite": "^4.0.0",
     "@tailwindcss/cli": "^4.0.0",
