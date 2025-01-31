@@ -1,9 +1,8 @@
-import { createMemo, createSignal, type Component } from 'solid-js';
+import { createMemo, type Component } from 'solid-js';
 import { Counter } from './components/Counter';
 import './App.css';
 import { DateTime } from 'luxon';
 import { createForm, getValue } from '@modular-forms/solid';
-import { effect } from 'solid-js/web';
 
 type PayDayForm = {
   payDate: number;
@@ -11,21 +10,24 @@ type PayDayForm = {
 
 const App: Component = () => {
   const [dateForm, { Form, Field }] = createForm<PayDayForm>();
-  const [payday, setPayday] = createSignal<DateTime<boolean>>(DateTime.fromObject({ day: 5 }).plus({ months: 1 }));
+
+  const payday = createMemo<DateTime<boolean>>(() => {
+    const payDate = getValue(dateForm, 'payDate');
+    const today = DateTime.now().day;
+    const defaultPayday = DateTime.fromObject({ day: 1 }).plus({ months: 1 });
+
+    if (payDate && today > payDate) {
+      return DateTime.fromObject({ day: payDate }).plus({ months: 1 });
+    } else if (payDate && today < payDate) {
+      return DateTime.fromObject({ day: payDate });
+    }
+
+    return defaultPayday;
+  });
+  
   const paydayDisplay = createMemo<string>(() => {
     return payday().toFormat('dd/MM/yyyy');
   })
-
-  effect(() => {
-    const payDate = getValue(dateForm, 'payDate');
-    const today = DateTime.now().day;
-
-    if (payDate && today > payDate) {
-      setPayday(DateTime.fromObject({ day: payDate }).plus({ months: 1 }))
-    } else if (payDate && today < payDate) {
-      setPayday(DateTime.fromObject({ day: payDate }))
-    }
-  });
 
   return (
     <div class="container mx-auto">
