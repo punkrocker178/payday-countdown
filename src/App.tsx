@@ -1,6 +1,6 @@
 import { createMemo, createSignal, type Component } from 'solid-js';
 import { Counter } from './components/Counter';
-import './App.scss';
+import './App.css';
 import { DateTime } from 'luxon';
 import { createForm, getValue } from '@modular-forms/solid';
 import { effect } from 'solid-js/web';
