@@ -48,8 +48,7 @@ export const Counter: Component<CounterDates> = (props) => {
   return (
     <div class="container mx-auto mb-32">
       <p class="flex justify-end text-3xl relative -top-10">
-        {currentDate()?.toFormat('dd/MM/yyyy')} -
-        {currentDate()?.toFormat('hh:mm:ss')}
+        {currentDate()?.toFormat('dd/MM/yyyy')} - {currentDate()?.toFormat('hh:mm:ss a')}
       </p>
       <p class="flex justify-center text-5xl font-bold">
         {displayDayCountdown()}:{displayHoursCountdown()}
