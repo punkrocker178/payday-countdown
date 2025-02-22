@@ -1,7 +1,7 @@
 import { createMemo, type Component, Show } from 'solid-js';
 import { Counter } from './components/Counter';
 import './App.css';
-import { DateTime } from 'luxon';
+import { DateTime, PossibleDaysInMonth } from 'luxon';
 import { createForm, getValue } from '@modular-forms/solid';
 
 type PayDayForm = {
@@ -10,10 +10,11 @@ type PayDayForm = {
 
 const App: Component = () => {
   const [dateForm, { Form, Field }] = createForm<PayDayForm>();
+  const currentDate = DateTime.now();
 
   const payday = createMemo<DateTime<boolean>>(() => {
     const payDate = getValue(dateForm, 'payDate');
-    const today = DateTime.now().day;
+    const today = currentDate.day;
     const defaultPayday = DateTime.fromObject({ day: 1 }).plus({ months: 1 });
 
     if (payDate && today >= payDate) {
@@ -29,14 +30,18 @@ const App: Component = () => {
     return payday().toFormat('dd/MM/yyyy');
   })
 
+  const maxDate = createMemo<PossibleDaysInMonth>(() => {
+    return payday().daysInMonth!;
+  });
+
   return (
-    <div class="container mx-auto">
-      <div class="mb-8 flex flex-col justify-center">
-        <div>
-          <label for="payDate" class="font-semibold">When is your payday</label>
+    <div class="container mx-auto p-4">
+      <div class="mb-8 flex justify-center">
+        <div class="w-1/3">
+          <label for="payDate" class="font-semibold text-3xl">Which date is your paycheck</label>
           <Form>
             <Field name="payDate" type="number">
-              {(field, props) => <input class="block form" id="payDate" type="number" max="31" min="1" {...props}></input>}
+              {(field, props) => <input class="block w-full h-8 p-2 text-lg/7" id="payDate" type="number" max={maxDate()} min="1" {...props}></input>}
             </Field>
           </Form>
         </div>

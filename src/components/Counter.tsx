@@ -43,7 +43,7 @@ export const Counter: Component<CounterDates> = (props) => {
   onCleanup(() => clearInterval(timer));
 
   return (
-    <div class="container mx-auto mb-32">
+    <div class="container mx-auto mb-24">
       <div class=" text-5xl font-bold flex justify-center mb-6">
         <div class="p-2 border-4 border-indigo-600 rounded-2xl">
           {displayDayCountdown()}:{displayHoursCountdown()}
